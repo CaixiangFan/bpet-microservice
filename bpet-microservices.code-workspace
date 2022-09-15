@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "admin"
+    },
+    {
+      "path": "register"
+    },
+    {
+      "path": "submit-bid"
+    },
+    {
+      "path": "submit-offer"
+    },
+    {
+      "path": "backend"
+    }
+  ],
+  "settings": {}
+}
