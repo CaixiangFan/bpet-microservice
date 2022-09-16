@@ -7,6 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { MessagePattern, EventPattern } from '@nestjs/microservices';
 import { ApproveRequest } from './approve-request.dto';
 import { TokenRequest } from './token-request.dto';
 
@@ -19,39 +20,64 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('/balance/:account')
-  async getBalance(@Param('account') account: string) {
-    const balance = await this.appService.getBalance(account);
-    return {
-      account,
-      balance,
-      timestamp: new Date(),
-    };
+  @MessagePattern({ cmd: 'get_balance' }) 
+  async getBalance(account: string): Promise<number> {
+    console.log('admin_service received account addr: ', account);
+    return this.appService.getBalance(account);
   }
-  @Get('/suppliers')
+
+  @MessagePattern({ cmd: 'get_suppliers'})
   async getSuppliers() {
-    const suppliers = await this.appService.getSuppliers();
-    return suppliers;
+    return this.appService.getSuppliers();
   }
 
-  @Get('/consumers')
+  @MessagePattern({ cmd: 'get_consumers'})
   async getConsumers() {
-    const consumers = await this.appService.getConsumers();
-    return consumers;
+    return this.appService.getConsumers();
   }
 
-  @Post('/approve')
-  async approve(@Body() approveRequest: ApproveRequest) {
-    const txHash = await this.appService.approve(approveRequest.account, approveRequest.allowance);
-    return txHash;
+  @EventPattern('approved')
+  approve(approveRequest: ApproveRequest) {
+    this.appService.approve(approveRequest);
   }
 
-  @Post('/token')
-  async requestToken(@Body() tokenRequest: TokenRequest) {
-    const txHash = await this.appService.requestToken(
-      tokenRequest.action, 
-      tokenRequest.account,
-      tokenRequest.amount);
-    return txHash;
+  @EventPattern('token_requested')
+  requestToken(tokenRequest: TokenRequest) {
+    this.appService.requestToken(tokenRequest);
   }
+  // @Get('/balance/:account')
+  // async getBalance(@Param('account') account: string) {
+  //   const balance = await this.appService.getBalance(account);
+  //   return {
+  //     account,
+  //     balance,
+  //     timestamp: new Date(),
+  //   };
+  // }
+  // @Get('/suppliers')
+  // async getSuppliers() {
+  //   const suppliers = await this.appService.getSuppliers();
+  //   return suppliers;
+  // }
+
+  // @Get('/consumers')
+  // async getConsumers() {
+  //   const consumers = await this.appService.getConsumers();
+  //   return consumers;
+  // }
+
+  // @Post('/approve')
+  // async approve(@Body() approveRequest: ApproveRequest) {
+  //   const txHash = await this.appService.approve(approveRequest.account, approveRequest.allowance);
+  //   return txHash;
+  // }
+
+  // @Post('/token')
+  // async requestToken(@Body() tokenRequest: TokenRequest) {
+  //   const txHash = await this.appService.requestToken(
+  //     tokenRequest.action, 
+  //     tokenRequest.account,
+  //     tokenRequest.amount);
+  //   return txHash;
+  // }
 }

@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import { SignerService } from './shared/services/signer/signer.service';
 import * as TokenContractAbi from 'src/contracts/EnergyToken.sol/EnergyToken.json';
 import * as RegistryContractAbi from 'src/contracts/Registry.sol/Registry.json';
+import { ApproveRequest } from './approve-request.dto';
+import { TokenRequest } from './token-request.dto';
 
 
 @Injectable()
@@ -33,7 +35,7 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async getBalance(account: string) {
+  async getBalance(account: string): Promise<number> {
     try {
       const balanceBN = await this.tokenContractInstance.balanceOf(account);
       const decimals = await this.tokenContractInstance.decimals();
@@ -44,7 +46,7 @@ export class AppService {
     }
   }
 
-  async getSuppliers() {
+  async getSuppliers(): Promise<any[]>  {
     try {
       const registeredSuppliers = await this.registryContractInstance.getAllSuppliers();
       const decimals = await this.tokenContractInstance.decimals();
@@ -69,7 +71,7 @@ export class AppService {
     }
   }
 
-  async getConsumers() {
+  async getConsumers(): Promise<any[]>  {
     try {
       const registeredConsumers = await this.registryContractInstance.getAllConsumers();
       const decimals = await this.tokenContractInstance.decimals();
@@ -93,23 +95,26 @@ export class AppService {
     }
   }
 
-  async approve(account: string, allowance: number) {
+  async approve(approveRequest: ApproveRequest) {
     try {
-      const tx = await this.tokenContractInstance.approve(account, allowance);
-      return tx.hash;
+      const tx = await this.tokenContractInstance.approve(
+        approveRequest.account, 
+        approveRequest.allowance,
+        );
     } catch(error) {
       console.log(error);
     }
   }
 
-  async requestToken(action: string, account: string, amount: number) {
+  async requestToken(tokenRequest: TokenRequest) {
     try {
-      if (action === 'mintETK') {
-        const tx = await this.tokenContractInstance.mint(account, amount);
-        return tx.hash;
-      } else if (action === 'burnETK') {
-        const tx = await this.tokenContractInstance.burn(amount);
-        return tx.hash;
+      if (tokenRequest.action === 'mintETK') {
+        const tx = await this.tokenContractInstance.mint(
+          tokenRequest.account, 
+          tokenRequest.amount
+          );
+      } else if (tokenRequest.action === 'burnETK') {
+        const tx = await this.tokenContractInstance.burn(tokenRequest.amount);
       }
     }catch (error) {
       console.log(error);
