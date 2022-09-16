@@ -6,6 +6,7 @@ import { TokenRequest } from './token-request.dto';
 export class AppService {
   constructor(
     @Inject('ADMIN_SERVICE') private adminClient: ClientProxy,
+    @Inject('REGISTRY_SERVICE') private registryClient: ClientProxy,
   ) {}
 
   getHello(): string {
@@ -40,5 +41,21 @@ export class AppService {
       'token_requested',
       tokenRequest,
     );
+  }
+
+  async isRegisteredSupplier(account: string) {
+    return this.registryClient.send({ cmd: 'is_registered_supplier'}, account);
+  }
+
+  async isRegisteredConsumer(account: string) {
+    return this.registryClient.send({ cmd: 'is_registered_consumer'}, account);
+  }
+
+  async getSupplier(account: string) {
+    return this.registryClient.send({ cmd: 'get_supplier'}, account);
+  }
+
+  async getConsumer(account: string) {
+    return this.registryClient.send({ cmd: 'get_consumer'}, account);
   }
 }

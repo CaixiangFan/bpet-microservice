@@ -11,6 +11,26 @@ import { AppService } from './app.service';
         transport: Transport.TCP,
         options: { port: 3001 }
       },
+      {
+        name: 'REGISTRY_SERVICE',
+        transport: Transport.TCP,
+        options: { port: 3002}
+      },
+      // {
+      //   name: 'BID_SERVICE',
+      //   transport: Transport.TCP,
+      //   options: { port: 3003}
+      // },
+      // {
+      //   name: 'OFFER_SERVICE',
+      //   transport: Transport.TCP,
+      //   options: { port: 3004}
+      // },
+      // {
+      //   name: 'ETK_SERVICE',
+      //   transport: Transport.TCP,
+      //   options: { port: 3005}
+      // }
     ])
   ],
   controllers: [AppController],

@@ -11,7 +11,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('/balance/:account')
+  @Get('/admin/balance/:account')
   async getBalance(@Param('account') account: string){
     const balance = await this.appService.getBalance(account);
     console.log(`account: ${account}, balance: ${balance}`);
@@ -22,27 +22,50 @@ export class AppController {
     };
   }
 
-  @Get('/suppliers')
+  @Get('/admin/suppliers')
   async getSuppliers() {
     const suppliers = await this.appService.getSuppliers();
     return suppliers;
   }
 
-  @Get('/consumers')
+  @Get('/admin/consumers')
   async getConsumers() {
     const consumers = await this.appService.getConsumers();
     return consumers;
   }
 
-  @Post('/approve')
+  @Post('/admin/approve')
   approve(@Body() approveRequest: ApproveRequest) {
     this.appService.approve(approveRequest);
-    // return txHash;
   }
-s
-  @Post('/token')
+
+  @Post('/admin/token')
   requestToken(@Body() tokenRequest: TokenRequest) {
     this.appService.requestToken(tokenRequest);
-    // return txHash;
   }
+
+  @Get('/registry/isregisteredsupplier/:account')
+  async isRegisteredSupplier(@Param('account') account: string) {
+    const _registeredSupplier = await this.appService.isRegisteredSupplier(account);
+    return _registeredSupplier;
+  }
+
+  @Get('/registry/isregisteredconsumer/:account')
+  async isRegisteredConsumer(@Param('account') account: string) {
+    const _registeredConsumer = await this.appService.isRegisteredConsumer(account);
+    return _registeredConsumer;
+  }
+
+  @Get('/registry/getsupplier/:account')
+  async getSupplier(@Param('account') account: string) {
+    const _supplier = await this.appService.getSupplier(account);
+    return _supplier;
+  }
+
+  @Get('/registry/getconsumer/:account')
+  async getConsumer(@Param('account') account: string) {
+    const _consumer = await this.appService.getConsumer(account);
+    return _consumer;
+  }
+
 }
