@@ -6,7 +6,6 @@ import * as RegistryContractAbi from 'src/contracts/Registry.sol/Registry.json';
 import { ApproveRequest } from './approve-request.dto';
 import { TokenRequest } from './token-request.dto';
 
-
 @Injectable()
 export class AppService {
   tokenContractInstance: ethers.Contract;
