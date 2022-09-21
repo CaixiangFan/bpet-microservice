@@ -8,7 +8,7 @@ export class AppService {
   constructor(
     @Inject('ADMIN_SERVICE') private adminClient: ClientProxy,
     @Inject('REGISTRY_SERVICE') private registryClient: ClientProxy,
-    @Inject('PRICE_SERVICE') private priceClient: ClientProxy,
+    @Inject('POOLMARKET_SERVICE') private poolmarketClient: ClientProxy,
   ) {}
 
   getHello(): string {
@@ -59,12 +59,24 @@ export class AppService {
     return this.registryClient.send({ cmd: 'get_consumer'}, account);
   }
 
-  // PRICE_SERVICE
+  // POOLMARKET_SERVICE
   async getsmps() {
-    return this.priceClient.send({ cmd: 'get_smps' }, {});
+    return this.poolmarketClient.send({ cmd: 'get_smps' }, {});
   }
 
   async getProjectedPoolPrice() {
-    return this.priceClient.send( { cmd: 'get_projected_poolprice' }, {});
+    return this.poolmarketClient.send( { cmd: 'get_projected_poolprice' }, {});
+  }
+
+  async getOffers() {
+    return this.poolmarketClient.send({ cmd: 'get_offers'}, {} );
+  }
+
+  async getBids() {
+    return this.poolmarketClient.send({ cmd: 'get_bids'}, {});
+  }
+
+  async getDispatchedOffers() {
+    return this.poolmarketClient.send({ cmd: 'get_dispatched_offers'}, {});
   }
 }

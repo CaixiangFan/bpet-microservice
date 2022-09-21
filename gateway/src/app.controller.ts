@@ -65,17 +65,35 @@ export class AppController {
     return _consumer;
   }
 
-  // PRICE_SERVICE
-  @Get('/price/getsmp')
+  // POOLMARKET_SERVICE
+  @Get('/poolmarket/getsmp')
   async getsmp() {
     const _smpList = await this.appService.getsmps();
     return _smpList;
   }
 
-  @Get('/price/getProjectedPoolPrice')
+  @Get('/poolmarket/getProjectedPoolPrice')
   async getProjectedPoolPrice() {
     const _projectedPoolPrice = await this.appService.getProjectedPoolPrice();
     return _projectedPoolPrice;
+  }
+
+  @Get('/poolmarket/getOffers')
+  async getValidOffers() {
+    const offers = await this.appService.getOffers();
+    return offers;
+  }
+
+  @Get('/poolmarket/getBids')
+  async getBids() {
+    const bids = await this.appService.getBids();
+    return bids;
+  }
+
+  @Get('/poolmarket/getDispatchedOffers')
+  async getDispatchedOffers() {
+    const dispatchedOffers = await this.appService.getDispatchedOffers();
+    return dispatchedOffers;
   }
 
 }

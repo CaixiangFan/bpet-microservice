@@ -6,6 +6,7 @@ import * as poolmarketContractAbi from 'src/contracts/PoolMarket.sol/PoolMarket.
 import { SMP } from './smp.dto';
 import { Offer } from './offer.dto';
 import { Bid } from './bid.dto';
+import { DispatchedOffer } from './dispatchedOffer.dto';
 @Injectable()
 export class AppService {
   poolmarketContractInstance: ethers.Contract;
@@ -50,7 +51,6 @@ export class AppService {
           var minutes = date.getMinutes();
           var marginalOffer = await this.poolmarketContractInstance.getMarginalOffer(currentMinute);
           var volume = this.convertBigNumberToNumber(marginalOffer.amount);
-          // smps.push({"DateHE": `${he} ${hour+1}`, "Time": `${hour}:${minutes}`, "Price": convertBigNumberToNumber(smp), "Volume": volume});
           smps.push(new SMP(
               `${he} ${hour+1}`, 
               `${hour}:${minutes}`, 
@@ -97,7 +97,6 @@ export class AppService {
         var submitMinute = this.convertBigNumberToNumber(offer.submitMinute);
         var supplierAccount = offer.supplierAccount;
         var isValid = offer.isValid;
-        // offers.push({amount, price, submitMinute, supplierAccount, isValid});
         offers.push(new Offer(amount, price, submitMinute, supplierAccount, isValid))
       }
       return offers;
@@ -110,12 +109,6 @@ export class AppService {
         var bid = await this.poolmarketContractInstance.getEnergyBid(bidIds[i]);
         var submitTimeStamp = this.convertBigNumberToNumber(bid.submitMinute);
         var submitTime = new Date(submitTimeStamp * 1000);
-
-        // bids.push({"submitAt": submitTime.toLocaleTimeString('en-us'), 
-        //           "amount": this.convertBigNumberToNumber(bid.amount),
-        //           "price": this.convertBigNumberToNumber(bid.price),
-        //           "submitMinute": this.convertBigNumberToNumber(bid.submitMinute),
-        //           "consumerAccount": bid.consumerAccount});
         bids.push(new Bid(
           submitTime.toLocaleTimeString('en-us'),
           this.convertBigNumberToNumber(bid.amount),
@@ -131,6 +124,13 @@ export class AppService {
       const currBlock = await this.provider.getBlock("latest");
       const currHour = Math.floor(currBlock.timestamp / 3600) * 3600;
       const dispatchedOffers = await this.poolmarketContractInstance.getDispatchedOffers(currHour);
-      return dispatchedOffers;
+      var _dispatchedOffers = []
+      for (let i=0; i<dispatchedOffers.length; i++) {
+        _dispatchedOffers.push(new DispatchedOffer(
+          dispatchedOffers[i][0],
+          this.convertBigNumberToNumber(dispatchedOffers[i][1]),
+          this.convertBigNumberToNumber(dispatchedOffers[i][2])))
+      }
+      return _dispatchedOffers;
     }
 }

@@ -27,7 +27,7 @@ import { AppService } from './app.service';
       //   options: { port: 3004}
       // },
       {
-        name: 'PRICE_SERVICE',
+        name: 'POOLMARKET_SERVICE',
         transport: Transport.TCP,
         options: { port: 3005}
       }
