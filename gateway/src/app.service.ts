@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApproveRequest } from './approve-request.dto';
+import { SMP } from './smp.dto';
 import { TokenRequest } from './token-request.dto';
 @Injectable()
 export class AppService {
@@ -59,7 +60,11 @@ export class AppService {
   }
 
   // PRICE_SERVICE
-  async getsmp() {
-    return this.priceClient.send({ cmd: 'get_smp' }, {});
+  async getsmps() {
+    return this.priceClient.send({ cmd: 'get_smps' }, {});
+  }
+
+  async getProjectedPoolPrice() {
+    return this.priceClient.send( { cmd: 'get_projected_poolprice' }, {});
   }
 }

@@ -68,7 +68,14 @@ export class AppController {
   // PRICE_SERVICE
   @Get('/price/getsmp')
   async getsmp() {
-    const _smpList = await this.appService.getsmp();
+    const _smpList = await this.appService.getsmps();
     return _smpList;
   }
+
+  @Get('/price/getProjectedPoolPrice')
+  async getProjectedPoolPrice() {
+    const _projectedPoolPrice = await this.appService.getProjectedPoolPrice();
+    return _projectedPoolPrice;
+  }
+
 }
