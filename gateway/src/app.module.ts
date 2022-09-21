@@ -26,11 +26,11 @@ import { AppService } from './app.service';
       //   transport: Transport.TCP,
       //   options: { port: 3004}
       // },
-      // {
-      //   name: 'ETK_SERVICE',
-      //   transport: Transport.TCP,
-      //   options: { port: 3005}
-      // }
+      {
+        name: 'PRICE_SERVICE',
+        transport: Transport.TCP,
+        options: { port: 3005}
+      }
     ])
   ],
   controllers: [AppController],

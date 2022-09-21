@@ -7,17 +7,15 @@ export class AppService {
   constructor(
     @Inject('ADMIN_SERVICE') private adminClient: ClientProxy,
     @Inject('REGISTRY_SERVICE') private registryClient: ClientProxy,
+    @Inject('PRICE_SERVICE') private priceClient: ClientProxy,
   ) {}
 
   getHello(): string {
     return 'Hello World!';
   }
 
+  // ADMIN_SERVICE
   async getBalance(account: string) {
-    console.log(`backend service account: ${account}`);
-    // const balance = await this.adminClient.send({ cmd: 'get_balance' }, account);
-    // console.log(`backend service received balance: ${balance}`);
-    // return balance;
     return this.adminClient.send({ cmd: 'get_balance' }, account);
   }
 
@@ -43,6 +41,7 @@ export class AppService {
     );
   }
 
+  // REGISTRY_SERVICE
   async isRegisteredSupplier(account: string) {
     return this.registryClient.send({ cmd: 'is_registered_supplier'}, account);
   }
@@ -57,5 +56,10 @@ export class AppService {
 
   async getConsumer(account: string) {
     return this.registryClient.send({ cmd: 'get_consumer'}, account);
+  }
+
+  // PRICE_SERVICE
+  async getsmp() {
+    return this.priceClient.send({ cmd: 'get_smp' }, {});
   }
 }

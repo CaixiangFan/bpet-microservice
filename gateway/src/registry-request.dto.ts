@@ -1,7 +1,10 @@
 export class RegistryRequest {
   constructor(
-    public action: string,
+    public userType: string,
+    public assetID: string,
+    public capacityOrLoad: number,
     public account: string,
-    public amount: number,
+    public blockAmount: number,
+    public orderControl: string,
   ) {}
 }

@@ -11,15 +11,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  // ADMIN_SERVICE
   @Get('/admin/balance/:account')
   async getBalance(@Param('account') account: string){
     const balance = await this.appService.getBalance(account);
-    console.log(`account: ${account}, balance: ${balance}`);
-    return {
-      account,
-      balance,
-      timestamp: new Date(),
-    };
+    return balance;
   }
 
   @Get('/admin/suppliers')
@@ -44,6 +40,7 @@ export class AppController {
     this.appService.requestToken(tokenRequest);
   }
 
+  // REGISTRY_SERVICE
   @Get('/registry/isregisteredsupplier/:account')
   async isRegisteredSupplier(@Param('account') account: string) {
     const _registeredSupplier = await this.appService.isRegisteredSupplier(account);
@@ -68,4 +65,10 @@ export class AppController {
     return _consumer;
   }
 
+  // PRICE_SERVICE
+  @Get('/price/getsmp')
+  async getsmp() {
+    const _smpList = await this.appService.getsmp();
+    return _smpList;
+  }
 }

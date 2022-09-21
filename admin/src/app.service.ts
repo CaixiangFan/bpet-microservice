@@ -97,7 +97,7 @@ export class AppService {
 
   async approve(approveRequest: ApproveRequest) {
     try {
-      const tx = await this.tokenContractInstance.approve(
+      await this.tokenContractInstance.approve(
         approveRequest.account, 
         approveRequest.allowance,
         );
