@@ -35,12 +35,15 @@ export class AppService {
     return 'Hello World!';
   }
 
+  convertBigNumberToNumber(value): number {
+    const decimals = 18;
+    return Math.round(Number(ethers.utils.formatEther(value)) * 10 ** decimals);
+  }
+
   async getBalance(account: string): Promise<number> {
     try {
       const balanceBN = await this.tokenContractInstance.balanceOf(account);
-      const decimals = await this.tokenContractInstance.decimals();
-      const balance = Math.round(+ethers.utils.formatEther(balanceBN) * 10 ** decimals);
-      return balance;
+      return this.convertBigNumberToNumber(balanceBN);
     } catch (error) {
       console.log(error);
     }

@@ -136,12 +136,20 @@ export class AppService {
 
     async getTotalDemandMinutes() {
       const totalDemandMinutes = await this.poolmarketContractInstance.getTotalDemandMinutes();
-      return totalDemandMinutes;
+      var minutes = [];
+      totalDemandMinutes.forEach(minute => minutes.push(this.convertBigNumberToNumber(minute)));
+      return minutes;
     }
 
     async getMarginalOffer(timestamp: number) {
       const marginalOffer = await this.poolmarketContractInstance.getMarginalOffer(timestamp);
-      return marginalOffer;
+      return {
+        'amount': this.convertBigNumberToNumber(marginalOffer.amount),
+        'price': this.convertBigNumberToNumber(marginalOffer.price),
+        'submitMinute': this.convertBigNumberToNumber(marginalOffer.submitMinute),
+        'supplierAccount': marginalOffer.supplierAccount,
+        'isValid': marginalOffer.isValid
+      };
     }
 
     async getTotalDemand(timestamp: number) {
