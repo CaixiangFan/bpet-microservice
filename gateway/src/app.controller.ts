@@ -1,6 +1,9 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { AllowanceRequest } from './allowance-request.dto';
 import { AppService } from './app.service';
 import { ApproveRequest } from './approve-request.dto';
+import { ConsumerRegisterRequest } from './consumer-register-request.dto';
+import { SupplierRegisterRequest } from './supplier-register-request.dto';
 import { TokenRequest } from './token-request.dto';
 @Controller()
 export class AppController {
@@ -65,6 +68,31 @@ export class AppController {
     return _consumer;
   }
 
+  @Get('/registry/getOwnerAddress')
+  async getAdminAddress() {
+    return await this.appService.getOwnerAddress();
+  }
+
+  @Get('/registry/getAllSuppliers')
+  async getAllSuppliers() {
+    return await this.appService.getAllSuppliers();
+  }
+
+  @Get('/registry/getAllConsumers')
+  async getAllConsumers() {
+    return this.appService.getAllConsumers();
+  }
+
+  @Post('/registry/registersupplier')
+  async registerSupplier(@Body() supplierRegistryRequest: SupplierRegisterRequest) {
+    await this.appService.registerSupplier(supplierRegistryRequest);
+  }
+
+  @Post('/registry/registerconsumer')
+  async registerConsumer(@Body() consumerRegistryRequest: ConsumerRegisterRequest) {
+    await this.appService.registerConsumer(consumerRegistryRequest);
+  }
+
   // POOLMARKET_SERVICE
   @Get('/poolmarket/getsmp')
   async getsmp() {
@@ -96,4 +124,39 @@ export class AppController {
     return dispatchedOffers;
   }
 
+  @Get('/poolmarket/getTotalDemandMinutes')
+  async getTotalDemandMinutes() {
+    const totalDemandMinutes = await this.appService.getTotalDemandMinutes();
+    return totalDemandMinutes;
+  }
+
+  @Get('/poolmarket/getMarginalOffer/:timestamp')
+  async getMarginalOffer(@Param('timestamp') timestamp: number) {
+    const marginalOffer = await this.appService.getMarginalOffer(timestamp);
+    return marginalOffer;
+  }
+
+  @Get('/poolmarket/getTotalDemand/:timestamp')
+  async getTotalDemand(@Param('timestamp') timestamp: number) {
+    const totalDemand = await this.appService.getTotalDemand(timestamp);
+    return totalDemand;
+  }
+
+  @Get('/poolmarket/getMinMaxPrices')
+  async getMinMaxPrices() {
+    const minmaxPrices = await this.appService.getMinMaxPrices();
+    return minmaxPrices;
+  }
+
+  // ETK_SERVICE
+  @Get('/etk/getOwnerAddress')
+  async getETCOwnerAddress() {
+    return await this.appService.getETCOwnerAddress();
+  }    
+
+  @Get('/etk/allowance/:owner/:spender')
+  async allowance(@Param('owner') owner: string, @Param('spender') spender: string) {
+    const allowanceRequest = new AllowanceRequest(owner, spender);
+    return await this.appService.allowance(allowanceRequest);
+  }
 }

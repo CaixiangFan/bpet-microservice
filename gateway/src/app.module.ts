@@ -20,6 +20,11 @@ import { AppService } from './app.service';
         name: 'POOLMARKET_SERVICE',
         transport: Transport.TCP,
         options: { port: 3003}
+      },
+      {
+        name: 'ETK_SERVICE',
+        transport: Transport.TCP,
+        options: { port: 3004}
       }
     ])
   ],

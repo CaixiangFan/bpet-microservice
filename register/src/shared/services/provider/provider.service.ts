@@ -9,7 +9,7 @@ export class ProviderService {
   }
 
   setupProvider() {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_RPC);
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
     this.provider = provider;
   }
 

@@ -35,4 +35,24 @@ export class AppController {
   async getDispatchedOffers() {
     return this.appService.getDispatchedOffers();
   }
+
+  @MessagePattern({ cmd: 'get_total_demand_minutes'})
+  async getTotalDemandMinutes() {
+    return this.appService.getTotalDemandMinutes();
+  }
+
+  @MessagePattern({ cmd: 'get_marginal_offer'})
+  async getMarginalOffer(timestamp: number) {
+    return this.appService.getMarginalOffer(timestamp);
+  }
+
+  @MessagePattern({ cmd: 'get_total_demand'})
+  async getTotalDemand(timestamp: number) {
+    return this.appService.getTotalDemand(timestamp);
+  }
+
+  @MessagePattern({ cmd: 'get_min_max_prices'})
+  async getMinMaxPrices() {
+    return this.appService.getMinMaxPrices();
+  }
 }

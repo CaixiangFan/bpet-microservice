@@ -133,4 +133,28 @@ export class AppService {
       }
       return _dispatchedOffers;
     }
+
+    async getTotalDemandMinutes() {
+      const totalDemandMinutes = await this.poolmarketContractInstance.getTotalDemandMinutes();
+      return totalDemandMinutes;
+    }
+
+    async getMarginalOffer(timestamp: number) {
+      const marginalOffer = await this.poolmarketContractInstance.getMarginalOffer(timestamp);
+      return marginalOffer;
+    }
+
+    async getTotalDemand(timestamp: number) {
+      const totalDemand = this.convertBigNumberToNumber(await this.poolmarketContractInstance.totalDemands(timestamp));
+      return totalDemand;
+    }
+
+    async getMinMaxPrices() {
+      const minPrice = await this.poolmarketContractInstance.minAllowedPrice();
+      const maxPrice = await this.poolmarketContractInstance.maxAllowedPrice();
+      return { 
+        'min': this.convertBigNumberToNumber(minPrice), 
+        'max': this.convertBigNumberToNumber(maxPrice)
+      };
+    }
 }

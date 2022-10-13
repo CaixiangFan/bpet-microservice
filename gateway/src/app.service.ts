@@ -1,7 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApproveRequest } from './approve-request.dto';
-import { SMP } from './smp.dto';
+import { AllowanceRequest } from './allowance-request.dto';
+import { ConsumerRegisterRequest } from './consumer-register-request.dto';
+import { SupplierRegisterRequest } from './supplier-register-request.dto';
 import { TokenRequest } from './token-request.dto';
 @Injectable()
 export class AppService {
@@ -9,6 +11,7 @@ export class AppService {
     @Inject('ADMIN_SERVICE') private adminClient: ClientProxy,
     @Inject('REGISTRY_SERVICE') private registryClient: ClientProxy,
     @Inject('POOLMARKET_SERVICE') private poolmarketClient: ClientProxy,
+    @Inject('ETK_SERVICE') private etkClient: ClientProxy,
   ) {}
 
   getHello(): string {
@@ -59,6 +62,26 @@ export class AppService {
     return this.registryClient.send({ cmd: 'get_consumer'}, account);
   }
 
+  async getOwnerAddress() {
+    return this.registryClient.send({ cmd: 'get_owner_address'}, {});
+  }
+
+  async getAllSuppliers() {
+    return this.registryClient.send({ cmd: 'get_all_suppliers'}, {});
+  }
+
+  async getAllConsumers() {
+    return this.registryClient.send({ cmd: 'get_all_consumers'}, {});
+  }
+
+  async registerSupplier(supplierRegistryRequest: SupplierRegisterRequest) {
+    this.registryClient.emit('supplierRegistered', supplierRegistryRequest);
+  }
+
+  async registerConsumer(consumerRegistryRequest: ConsumerRegisterRequest) {
+    this.registryClient.emit('consumerRegistered', consumerRegistryRequest);
+  }
+
   // POOLMARKET_SERVICE
   async getsmps() {
     return this.poolmarketClient.send({ cmd: 'get_smps' }, {});
@@ -78,5 +101,30 @@ export class AppService {
 
   async getDispatchedOffers() {
     return this.poolmarketClient.send({ cmd: 'get_dispatched_offers'}, {});
+  }
+
+  async getTotalDemandMinutes() {
+    return this.poolmarketClient.send({ cmd: 'get_total_demand_minutes'}, {});
+  }
+
+  async getMarginalOffer(timestamp: number) {
+    return this.poolmarketClient.send({ cmd: 'get_marginal_offer'}, timestamp);
+  }
+
+  async getTotalDemand(timestamp: number) {
+    return this.poolmarketClient.send({ cmd: 'get_total_demand'}, timestamp);
+  }
+
+  async getMinMaxPrices() {
+    return this.poolmarketClient.send({ cmd: 'get_min_max_prices'}, {});
+  }
+
+  // ETK_SERVICE
+  async getETCOwnerAddress() {
+    return this.etkClient.send({ cmd: 'get_etc_owner_address'}, {});
+  }
+
+  async allowance(allowanceRequest: AllowanceRequest) {
+    return this.etkClient.send({ cmd: 'allowance'}, allowanceRequest);
   }
 }
