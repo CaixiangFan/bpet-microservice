@@ -12,6 +12,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @MessagePattern({ cmd: 'get_balance' }) 
+  async getBalance(account: string): Promise<number> {
+    return this.appService.getBalance(account);
+  }
+
   @MessagePattern({ cmd: 'get_etc_owner_address'})
   async getETCOwnerAddress() {
     return this.appService.getETCOwnerAddress();

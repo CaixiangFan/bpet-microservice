@@ -26,6 +26,14 @@ export class AppService {
     return Math.round(Number(ethers.utils.formatEther(value)) * 10 ** decimals);
   }
 
+  async getBalance(account: string): Promise<number> {
+    try {
+      const balanceBN = await this.etkContractInstance.balanceOf(account);
+      return this.convertBigNumberToNumber(balanceBN);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async getETCOwnerAddress() {
     return await this.etkContractInstance.owner();
   }

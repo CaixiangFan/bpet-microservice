@@ -19,10 +19,6 @@ export class AppService {
   }
 
   // ADMIN_SERVICE
-  async getBalance(account: string) {
-    return this.adminClient.send({ cmd: 'get_balance' }, account);
-  }
-
   async getSuppliers() {
     return this.adminClient.send({ cmd: 'get_suppliers' }, {});
   }
@@ -120,6 +116,10 @@ export class AppService {
   }
 
   // ETK_SERVICE
+  async getBalance(account: string) {
+    return this.etkClient.send({ cmd: 'get_balance' }, account);
+  }
+
   async getETCOwnerAddress() {
     return this.etkClient.send({ cmd: 'get_etc_owner_address'}, {});
   }

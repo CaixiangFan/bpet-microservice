@@ -14,13 +14,6 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // ADMIN_SERVICE
-  @Get('/admin/balance/:account')
-  async getBalance(@Param('account') account: string){
-    const balance = await this.appService.getBalance(account);
-    return balance;
-  }
-
   @Get('/admin/suppliers')
   async getSuppliers() {
     const suppliers = await this.appService.getSuppliers();
@@ -149,6 +142,12 @@ export class AppController {
   }
 
   // ETK_SERVICE
+  @Get('/etk/balance/:account')
+  async getBalance(@Param('account') account: string){
+    const balance = await this.appService.getBalance(account);
+    return balance;
+  }
+
   @Get('/etk/getOwnerAddress')
   async getETCOwnerAddress() {
     return await this.appService.getETCOwnerAddress();
