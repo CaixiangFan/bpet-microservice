@@ -14,7 +14,7 @@ export class AppService {
     if (!registryContractAddress || registryContractAddress.length === 0) return;
     this.registryContractInstance = new ethers.Contract(
       registryContractAddress,
-      RegistryContractAbi,
+      RegistryContractAbi.abi,
       this.signerService.signer
     );
   }

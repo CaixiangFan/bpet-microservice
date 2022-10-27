@@ -13,7 +13,7 @@ export class AppService {
     if (!etkContractAddress || etkContractAddress.length === 0) return;
     this.etkContractInstance = new ethers.Contract(
       etkContractAddress,
-      etkContractAbi,
+      etkContractAbi.abi,
       this.signerService.signer
     );
   }

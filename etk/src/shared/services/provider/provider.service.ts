@@ -12,15 +12,4 @@ export class ProviderService {
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
     this.provider = provider;
   }
-
-  // async getBalance(address: string) {
-  //   const balanceBN = await this.provider.getBalance(address);
-  //   const balance = ethers.utils.formatEther(balanceBN);
-  //   return balance;
-  // }
-
-  // async getBlockData(blockHashOrTag: string = 'latest') {
-  //   const block = await this.provider.getBlock(blockHashOrTag);
-  //   return block;
-  // }
 }

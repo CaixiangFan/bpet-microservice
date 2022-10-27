@@ -20,7 +20,7 @@ export class AppService {
     if (!poolmarketContractAddress || poolmarketContractAddress.length === 0) return;
     this.poolmarketContractInstance = new ethers.Contract(
       poolmarketContractAddress,
-      poolmarketContractAbi,
+      poolmarketContractAbi.abi,
       this.signerService.signer
     );
   }
