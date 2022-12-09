@@ -6,6 +6,7 @@ import { WalletService } from '../wallet/wallet.service';
 @Injectable()
 export class SignerService {
   signer: ethers.Wallet;
+  wsSigner: ethers.Wallet;
 
   constructor(
     private walletService: WalletService,
@@ -18,6 +19,9 @@ export class SignerService {
     if (!this.walletService.wallet || !this.providerService.provider) return;
     this.signer = this.walletService.wallet.connect(
       this.providerService.provider,
+    );
+    this.wsSigner = this.walletService.wallet.connect(
+      this.providerService.wsProvider,
     );
   }
 }

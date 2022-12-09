@@ -24,50 +24,48 @@ export class AppService {
   }
 
   async getConsumers() {
-    return this.adminClient.send({ cmd: 'get_consumers'}, {});
+    return this.adminClient.send({ cmd: 'get_consumers' }, {});
   }
 
   approve(approveRequest: ApproveRequest) {
-    this.adminClient.emit(
-      'approved',
-      approveRequest,
-    );
+    this.adminClient.emit('approved', approveRequest);
   }
 
   requestToken(tokenRequest: TokenRequest) {
-    this.adminClient.emit(
-      'token_requested',
-      tokenRequest,
-    );
+    this.adminClient.emit('token_requested', tokenRequest);
+  }
+
+  listenEvents() {
+    this.adminClient.emit('listen_events', {});
   }
 
   // REGISTRY_SERVICE
   async isRegisteredSupplier(account: string) {
-    return this.registryClient.send({ cmd: 'is_registered_supplier'}, account);
+    return this.registryClient.send({ cmd: 'is_registered_supplier' }, account);
   }
 
   async isRegisteredConsumer(account: string) {
-    return this.registryClient.send({ cmd: 'is_registered_consumer'}, account);
+    return this.registryClient.send({ cmd: 'is_registered_consumer' }, account);
   }
 
   async getSupplier(account: string) {
-    return this.registryClient.send({ cmd: 'get_supplier'}, account);
+    return this.registryClient.send({ cmd: 'get_supplier' }, account);
   }
 
   async getConsumer(account: string) {
-    return this.registryClient.send({ cmd: 'get_consumer'}, account);
+    return this.registryClient.send({ cmd: 'get_consumer' }, account);
   }
 
   async getOwnerAddress() {
-    return this.registryClient.send({ cmd: 'get_owner_address'}, {});
+    return this.registryClient.send({ cmd: 'get_owner_address' }, {});
   }
 
   async getAllSuppliers() {
-    return this.registryClient.send({ cmd: 'get_all_suppliers'}, {});
+    return this.registryClient.send({ cmd: 'get_all_suppliers' }, {});
   }
 
   async getAllConsumers() {
-    return this.registryClient.send({ cmd: 'get_all_consumers'}, {});
+    return this.registryClient.send({ cmd: 'get_all_consumers' }, {});
   }
 
   async registerSupplier(supplierRegistryRequest: SupplierRegisterRequest) {
@@ -84,35 +82,38 @@ export class AppService {
   }
 
   async getProjectedPoolPrice() {
-    return this.poolmarketClient.send( { cmd: 'get_projected_poolprice' }, {});
+    return this.poolmarketClient.send({ cmd: 'get_projected_poolprice' }, {});
   }
 
   async getOffers() {
-    return this.poolmarketClient.send({ cmd: 'get_offers'}, {} );
+    return this.poolmarketClient.send({ cmd: 'get_offers' }, {});
   }
 
   async getBids() {
-    return this.poolmarketClient.send({ cmd: 'get_bids'}, {});
+    return this.poolmarketClient.send({ cmd: 'get_bids' }, {});
   }
 
   async getDispatchedOffers() {
-    return this.poolmarketClient.send({ cmd: 'get_dispatched_offers'}, {});
+    return this.poolmarketClient.send({ cmd: 'get_dispatched_offers' }, {});
   }
 
-  async getTotalDemandMinutes() {
-    return this.poolmarketClient.send({ cmd: 'get_total_demand_minutes'}, {});
+  async getSystemMarginalMinutes() {
+    return this.poolmarketClient.send(
+      { cmd: 'get_system_marginal_minutes' },
+      {},
+    );
   }
 
   async getMarginalOffer(timestamp: number) {
-    return this.poolmarketClient.send({ cmd: 'get_marginal_offer'}, timestamp);
+    return this.poolmarketClient.send({ cmd: 'get_marginal_offer' }, timestamp);
   }
 
   async getTotalDemand(timestamp: number) {
-    return this.poolmarketClient.send({ cmd: 'get_total_demand'}, timestamp);
+    return this.poolmarketClient.send({ cmd: 'get_total_demand' }, timestamp);
   }
 
   async getMinMaxPrices() {
-    return this.poolmarketClient.send({ cmd: 'get_min_max_prices'}, {});
+    return this.poolmarketClient.send({ cmd: 'get_min_max_prices' }, {});
   }
 
   // ETK_SERVICE
@@ -121,10 +122,10 @@ export class AppService {
   }
 
   async getETCOwnerAddress() {
-    return this.etkClient.send({ cmd: 'get_etc_owner_address'}, {});
+    return this.etkClient.send({ cmd: 'get_etc_owner_address' }, {});
   }
 
   async allowance(allowanceRequest: AllowanceRequest) {
-    return this.etkClient.send({ cmd: 'allowance'}, allowanceRequest);
+    return this.etkClient.send({ cmd: 'allowance' }, allowanceRequest);
   }
 }

@@ -1,7 +1,4 @@
-import {
-  Controller,
-  Get,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MessagePattern, EventPattern } from '@nestjs/microservices';
 import { ApproveRequest } from './approve-request.dto';
@@ -16,12 +13,12 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @MessagePattern({ cmd: 'get_suppliers'})
+  @MessagePattern({ cmd: 'get_suppliers' })
   async getSuppliers() {
     return this.appService.getSuppliers();
   }
 
-  @MessagePattern({ cmd: 'get_consumers'})
+  @MessagePattern({ cmd: 'get_consumers' })
   async getConsumers() {
     return this.appService.getConsumers();
   }
@@ -34,5 +31,10 @@ export class AppController {
   @EventPattern('token_requested')
   requestToken(tokenRequest: TokenRequest) {
     this.appService.requestToken(tokenRequest);
+  }
+
+  @EventPattern('listen_events')
+  listenEvents() {
+    this.appService.listenEvents();
   }
 }

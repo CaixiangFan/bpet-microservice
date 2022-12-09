@@ -2,7 +2,6 @@
 dist
 node_modules
 
-
 # Logs
 logs
 *.log
@@ -37,3 +36,4 @@ lerna-debug.log*
 
 # env
 .env
+contracts

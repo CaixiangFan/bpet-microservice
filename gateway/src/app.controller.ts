@@ -36,16 +36,25 @@ export class AppController {
     this.appService.requestToken(tokenRequest);
   }
 
+  @Get('/admin/listenEvents')
+  listenEvents() {
+    this.appService.listenEvents();
+  }
+
   // REGISTRY_SERVICE
   @Get('/registry/isregisteredsupplier/:account')
   async isRegisteredSupplier(@Param('account') account: string) {
-    const _registeredSupplier = await this.appService.isRegisteredSupplier(account);
+    const _registeredSupplier = await this.appService.isRegisteredSupplier(
+      account,
+    );
     return _registeredSupplier;
   }
 
   @Get('/registry/isregisteredconsumer/:account')
   async isRegisteredConsumer(@Param('account') account: string) {
-    const _registeredConsumer = await this.appService.isRegisteredConsumer(account);
+    const _registeredConsumer = await this.appService.isRegisteredConsumer(
+      account,
+    );
     return _registeredConsumer;
   }
 
@@ -77,12 +86,16 @@ export class AppController {
   }
 
   @Post('/registry/registersupplier')
-  async registerSupplier(@Body() supplierRegistryRequest: SupplierRegisterRequest) {
+  async registerSupplier(
+    @Body() supplierRegistryRequest: SupplierRegisterRequest,
+  ) {
     await this.appService.registerSupplier(supplierRegistryRequest);
   }
 
   @Post('/registry/registerconsumer')
-  async registerConsumer(@Body() consumerRegistryRequest: ConsumerRegisterRequest) {
+  async registerConsumer(
+    @Body() consumerRegistryRequest: ConsumerRegisterRequest,
+  ) {
     await this.appService.registerConsumer(consumerRegistryRequest);
   }
 
@@ -117,10 +130,11 @@ export class AppController {
     return dispatchedOffers;
   }
 
-  @Get('/poolmarket/getTotalDemandMinutes')
-  async getTotalDemandMinutes() {
-    const totalDemandMinutes = await this.appService.getTotalDemandMinutes();
-    return totalDemandMinutes;
+  @Get('/poolmarket/getSystemMarginalMinutes')
+  async getSystemMarginalMinutes() {
+    const systemMarginalMinutes =
+      await this.appService.getSystemMarginalMinutes();
+    return systemMarginalMinutes;
   }
 
   @Get('/poolmarket/getMarginalOffer/:timestamp')
@@ -143,7 +157,7 @@ export class AppController {
 
   // ETK_SERVICE
   @Get('/etk/balance/:account')
-  async getBalance(@Param('account') account: string){
+  async getBalance(@Param('account') account: string) {
     const balance = await this.appService.getBalance(account);
     return balance;
   }
@@ -151,10 +165,13 @@ export class AppController {
   @Get('/etk/getOwnerAddress')
   async getETCOwnerAddress() {
     return await this.appService.getETCOwnerAddress();
-  }    
+  }
 
   @Get('/etk/allowance/:owner/:spender')
-  async allowance(@Param('owner') owner: string, @Param('spender') spender: string) {
+  async allowance(
+    @Param('owner') owner: string,
+    @Param('spender') spender: string,
+  ) {
     const allowanceRequest = new AllowanceRequest(owner, spender);
     return await this.appService.allowance(allowanceRequest);
   }
