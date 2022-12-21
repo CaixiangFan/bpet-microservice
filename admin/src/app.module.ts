@@ -5,10 +5,7 @@ import { AppService } from './app.service';
 import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    SharedModule
-  ],
+  imports: [ConfigModule.forRoot(), SharedModule],
   controllers: [AppController],
   providers: [AppService],
 })

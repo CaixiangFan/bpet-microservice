@@ -37,4 +37,9 @@ export class AppController {
   listenEvents() {
     this.appService.listenEvents();
   }
+
+  @EventPattern('calculate_smp')
+  calculateSMP() {
+    this.appService.calculateSMP();
+  }
 }

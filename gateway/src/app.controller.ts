@@ -36,11 +36,6 @@ export class AppController {
     this.appService.requestToken(tokenRequest);
   }
 
-  @Get('/admin/listenEvents')
-  listenEvents() {
-    this.appService.listenEvents();
-  }
-
   // REGISTRY_SERVICE
   @Get('/registry/isregisteredsupplier/:account')
   async isRegisteredSupplier(@Param('account') account: string) {

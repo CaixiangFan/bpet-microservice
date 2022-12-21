@@ -5,6 +5,8 @@ import { AllowanceRequest } from './allowance-request.dto';
 import { ConsumerRegisterRequest } from './consumer-register-request.dto';
 import { SupplierRegisterRequest } from './supplier-register-request.dto';
 import { TokenRequest } from './token-request.dto';
+import { Cron } from '@nestjs/schedule';
+
 @Injectable()
 export class AppService {
   constructor(
@@ -37,6 +39,12 @@ export class AppService {
 
   listenEvents() {
     this.adminClient.emit('listen_events', {});
+  }
+
+  // schedule gateway to call calculateSMP every minute at the 59th second
+  @Cron('59 * * * * *')
+  calculateSMP() {
+    this.adminClient.emit('calculate_smp', {});
   }
 
   // REGISTRY_SERVICE

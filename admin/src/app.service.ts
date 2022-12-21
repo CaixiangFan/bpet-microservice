@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { SignerService } from './shared/services/signer/signer.service';
-// import { ProviderService } from './shared/services/provider/provider.service';
+import { ProviderService } from './shared/services/provider/provider.service';
 import * as TokenContractAbi from 'src/contracts/EnergyToken.sol/EnergyToken.json';
 import * as RegistryContractAbi from 'src/contracts/Registry.sol/Registry.json';
 import * as PoolmarketContractAbi from 'src/contracts/PoolMarket.sol/PoolMarket.json';
@@ -15,7 +15,10 @@ export class AppService {
   poolmarketContractInstance: ethers.Contract;
   adminAddress: string;
 
-  constructor(private signerService: SignerService) {
+  constructor(
+    private signerService: SignerService,
+    private providerService: ProviderService,
+  ) {
     const tokenContractAddress = process.env.TOKEN_CONTRACT_ADDRESS;
     const registryContractAddress = process.env.REGISTRY_CONTRACT_ADDRESS;
     const poolmarketContractAddress = process.env.POOLMARKET_CONTRACT_ADDRESS;
@@ -156,7 +159,7 @@ export class AppService {
         console.log(JSON.stringify(offer, null, 4));
         if (amount > 0) {
           offerSubmitted = true;
-          this.poolmarketContractInstance.calculateSMP(bidSubmitted);
+          // this.poolmarketContractInstance.calculateSMP(bidSubmitted);
         }
       },
     );
@@ -173,13 +176,37 @@ export class AppService {
         console.log(JSON.stringify(bid, null, 4));
         if (amount > 0) {
           bidSubmitted = true;
-          this.poolmarketContractInstance.calculateSMP(bidSubmitted);
+          // this.poolmarketContractInstance.calculateSMP(bidSubmitted);
         }
       },
     );
   }
 
-  async calculateSMP(bidUpdated: boolean) {
-    await this.poolmarketContractInstance.calculateSMP(bidUpdated);
+  async calculateSMP() {
+    // define filters for events OfferSubmitted and BidSubmitted
+    let filterOfferSubmission =
+      this.poolmarketContractInstance.filters.OfferSubmitted();
+    let filterBidSubmission =
+      this.poolmarketContractInstance.filters.BidSubmitted();
+    // query offer and bid submission events in the past 60 blocks from blockchain logs
+    var logsOfferSubmission = await this.poolmarketContractInstance.queryFilter(
+      filterOfferSubmission,
+      -60,
+      'latest',
+    );
+    var logsBidSubmission = await this.poolmarketContractInstance.queryFilter(
+      filterBidSubmission,
+      -60,
+      'latest',
+    );
+    var latestBlock = await this.providerService.provider.getBlockNumber();
+    console.log('latest block number: ', latestBlock);
+    console.log('offers: ', logsOfferSubmission);
+    console.log('bids: ', logsBidSubmission);
+    if (logsBidSubmission.length > 0 || logsOfferSubmission.length > 0) {
+      await this.poolmarketContractInstance.calculateSMP(
+        logsBidSubmission.length > 0,
+      );
+    }
   }
 }
