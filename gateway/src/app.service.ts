@@ -37,14 +37,18 @@ export class AppService {
     this.adminClient.emit('token_requested', tokenRequest);
   }
 
-  listenEvents() {
-    this.adminClient.emit('listen_events', {});
-  }
-
-  // schedule gateway to call calculateSMP every minute at the 59th second
-  @Cron('59 * * * * *')
+  // schedule a job to run 1 second after the app starts.
+  //calculateSMP keeps listening to the BidSubmitted event
+  @Cron(new Date(Date.now() + 1000))
   calculateSMP() {
     this.adminClient.emit('calculate_smp', {});
+  }
+
+  // schedule a job to run every hour, at the start of the 2nd minute
+  // to calculate previous hour's PoolPrice on-chain.
+  @Cron('* 2 * * * *')
+  calculatePoolPrice() {
+    this.adminClient.emit('calculate_poolprice', {});
   }
 
   // REGISTRY_SERVICE

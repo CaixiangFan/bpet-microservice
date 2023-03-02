@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ethers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import { SignerService } from './shared/services/signer/signer.service';
 import { ProviderService } from './shared/services/provider/provider.service';
 import * as TokenContractAbi from 'src/contracts/EnergyToken.sol/EnergyToken.json';
@@ -144,69 +144,32 @@ export class AppService {
     }
   }
 
-  async listenEvents() {
-    let bidSubmitted = false;
-    let offerSubmitted = false;
-    this.poolmarketContractInstance.on(
-      'OfferSubmitted',
-      (amount, price, sender, event) => {
-        let offer = {
-          amount: this.convertBigNumberToNumber(amount),
-          price: this.convertBigNumberToNumber(price),
-          sender: sender,
-          data: event,
-        };
-        console.log(JSON.stringify(offer, null, 4));
-        if (amount > 0) {
-          offerSubmitted = true;
-          // this.poolmarketContractInstance.calculateSMP(bidSubmitted);
-        }
-      },
-    );
 
-    this.poolmarketContractInstance.on(
-      'BidSubmitted',
-      (amount, price, sender, event) => {
-        let bid = {
-          amount: this.convertBigNumberToNumber(amount),
-          price: this.convertBigNumberToNumber(price),
-          sender: sender,
-          data: event,
-        };
-        console.log(JSON.stringify(bid, null, 4));
-        if (amount > 0) {
-          bidSubmitted = true;
-          // this.poolmarketContractInstance.calculateSMP(bidSubmitted);
-        }
-      },
-    );
+  calculateSMP() {
+    // listener for BidSubmitted event
+    const listener = async (amount: BigNumber, price: BigNumber, sender: string, event: object) => {
+      let result = {
+        amount: this.convertBigNumberToNumber(amount),
+        price: this.convertBigNumberToNumber(price),
+        sender: sender,
+        data: event,
+      };
+      console.log(JSON.stringify(result, null, 4));
+
+      const offerIds = await this.poolmarketContractInstance.getValidOfferIDs();
+      if (offerIds.length > 0) {
+        console.log('calculating smp...');
+        await this.poolmarketContractInstance.calculateSMP();
+      }
+    };
+    console.log('Listening to the BidSubmitted event ...');
+    this.poolmarketContractInstance.on("BidSubmitted", listener);
   }
 
-  async calculateSMP() {
-    // define filters for events OfferSubmitted and BidSubmitted
-    let filterOfferSubmission =
-      this.poolmarketContractInstance.filters.OfferSubmitted();
-    let filterBidSubmission =
-      this.poolmarketContractInstance.filters.BidSubmitted();
-    // query offer and bid submission events in the past 60 blocks from blockchain logs
-    var logsOfferSubmission = await this.poolmarketContractInstance.queryFilter(
-      filterOfferSubmission,
-      -60,
-      'latest',
-    );
-    var logsBidSubmission = await this.poolmarketContractInstance.queryFilter(
-      filterBidSubmission,
-      -60,
-      'latest',
-    );
-    var latestBlock = await this.providerService.provider.getBlockNumber();
-    console.log('latest block number: ', latestBlock);
-    console.log('offers: ', logsOfferSubmission);
-    console.log('bids: ', logsBidSubmission);
-    if (logsBidSubmission.length > 0 || logsOfferSubmission.length > 0) {
-      await this.poolmarketContractInstance.calculateSMP(
-        logsBidSubmission.length > 0,
-      );
-    }
+  async calculatePoolPrice() {
+
+    const currentHour: number = Math.floor(Date.now() / 3600) * 3600;
+    console.log('Calculating pool prices ...');
+    await this.poolmarketContractInstance.calculatePoolPrice(currentHour);
   }
 }

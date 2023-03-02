@@ -100,7 +100,7 @@ export class AppService {
     const offerIds = await this.poolmarketContractInstance.getValidOfferIDs();
     var offers = [];
     for (let i = 0; i < offerIds.length; i++) {
-      var offer = await this.poolmarketContractInstance.getEnergyOffer(
+      var offer = await this.poolmarketContractInstance.energyOffers(
         offerIds[i],
       );
       var amount = this.convertBigNumberToNumber(offer.amount);
@@ -119,7 +119,7 @@ export class AppService {
     const bidIds = await this.poolmarketContractInstance.getValidBidIDs();
     var bids = [];
     for (let i = 0; i < bidIds.length; i++) {
-      var bid = await this.poolmarketContractInstance.getEnergyBid(bidIds[i]);
+      var bid = await this.poolmarketContractInstance.energyBids(bidIds[i]);
       var submitTimeStamp = this.convertBigNumberToNumber(bid.submitMinute);
       var submitTime = new Date(submitTimeStamp * 1000);
       bids.push(

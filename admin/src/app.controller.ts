@@ -33,13 +33,13 @@ export class AppController {
     this.appService.requestToken(tokenRequest);
   }
 
-  @EventPattern('listen_events')
-  listenEvents() {
-    this.appService.listenEvents();
-  }
-
   @EventPattern('calculate_smp')
   calculateSMP() {
     this.appService.calculateSMP();
+  }
+
+  @EventPattern('calculate_poolprice')
+  calculatePoolPrice() {
+    this.appService.calculatePoolPrice();
   }
 }
