@@ -39,7 +39,7 @@ export class AppService {
 
   // schedule a job to run 1 second after the app starts.
   //calculateSMP keeps listening to the BidSubmitted event
-  @Cron(new Date(Date.now() + 1000))
+  @Cron('1 * * * * *')
   calculateSMP() {
     this.adminClient.emit('calculate_smp', {});
   }
