@@ -159,7 +159,9 @@ export class AppService {
       const offerIds = await this.poolmarketContractInstance.getValidOfferIDs();
       if (offerIds.length > 0) {
         console.log('calculating smp...');
-        await this.poolmarketContractInstance.calculateSMP();
+        const tx = await this.poolmarketContractInstance.calculateSMP();
+        const receipt = await tx.wait(1);
+        if (receipt.status == 1) console.log(receipt);
       }
     };
     console.log('Listening to the BidSubmitted event ...');
