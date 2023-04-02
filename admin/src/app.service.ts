@@ -154,14 +154,17 @@ export class AppService {
         sender: sender,
         data: event,
       };
-      console.log(JSON.stringify(result, null, 4));
-
+      // console.log(JSON.stringify(result, null, 4));
       const offerIds = await this.poolmarketContractInstance.getValidOfferIDs();
       if (offerIds.length > 0) {
         console.log('calculating smp...');
-        const tx = await this.poolmarketContractInstance.calculateSMP();
-        const receipt = await tx.wait(1);
-        if (receipt.status == 1) console.log(receipt);
+        try {
+          const tx = await this.poolmarketContractInstance.calculateSMP();
+          const receipt = await tx.wait(1);
+          if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
+        } catch (error) {
+          console.log('error code:', error.code);
+        }
       }
     };
     console.log('Listening to the BidSubmitted event ...');
@@ -169,9 +172,13 @@ export class AppService {
   }
 
   async calculatePoolPrice() {
-
     const currentHour: number = Math.floor(Date.now() / 3600) * 3600;
-    console.log('Calculating pool prices ...');
-    await this.poolmarketContractInstance.calculatePoolPrice(currentHour);
+    const dispatchedOffers = await this.poolmarketContractInstance.getDispatchedOffers(currentHour);
+    if (dispatchedOffers.length > 0) {
+      console.log('Calculating pool prices ...');
+      await this.poolmarketContractInstance.calculatePoolPrice(currentHour);
+    } else {
+      console.log("No offers dispatched in the past hour!")
+    }
   }
 }
