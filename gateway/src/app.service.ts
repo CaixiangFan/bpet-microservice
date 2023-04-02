@@ -45,9 +45,9 @@ export class AppService {
     this.adminClient.emit('calculate_smp', {});
   }
 
-  // schedule a job to run every hour, at the start of the 2nd minute
+  // schedule a job to run every hour, at the start of the 1st minute
   // to calculate previous hour's PoolPrice on-chain.
-  @Cron('* 2 * * * *')
+  @Cron('0 1 * * * *')
   calculatePoolPrice() {
     this.adminClient.emit('calculate_poolprice', {});
   }

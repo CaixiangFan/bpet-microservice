@@ -36,7 +36,8 @@ export class AppService {
   }
 
   async getsmps(): Promise<SMP[]> {
-    var datetime = new Date();
+    const currBlock = await this.providerService.provider.getBlock("latest");
+    const datetime = new Date(currBlock.timestamp * 1000);
     const smps = [];
     const second = datetime.getSeconds();
     const minute = datetime.getMinutes();

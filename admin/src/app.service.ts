@@ -172,11 +172,28 @@ export class AppService {
   }
 
   async calculatePoolPrice() {
-    const currentHour: number = Math.floor(Date.now() / 3600) * 3600;
-    const dispatchedOffers = await this.poolmarketContractInstance.getDispatchedOffers(currentHour);
+    const currBlock = await this.providerService.provider.getBlock("latest");
+    const pastHour: number = (Math.floor(currBlock.timestamp / 3600) - 1) * 3600;
+    const dispatchedOffers = await this.poolmarketContractInstance.getDispatchedOffers(pastHour);
     if (dispatchedOffers.length > 0) {
+      console.log('calculating smp...');
+      try {
+        const tx = await this.poolmarketContractInstance.calculateSMP();
+        const receipt = await tx.wait(1);
+        if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
+      } catch (error) {
+        console.log('error code:', error.code);
+      }
+
       console.log('Calculating pool prices ...');
-      await this.poolmarketContractInstance.calculatePoolPrice(currentHour);
+      try {
+        const tx = await this.poolmarketContractInstance.calculatePoolPrice(pastHour);
+        const receipt = await tx.wait(1);
+        if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
+      } catch(error) {
+        console.log('error code:', error.code);
+      }
+
     } else {
       console.log("No offers dispatched in the past hour!")
     }
