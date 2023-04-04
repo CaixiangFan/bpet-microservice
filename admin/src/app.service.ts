@@ -161,7 +161,16 @@ export class AppService {
         try {
           const tx = await this.poolmarketContractInstance.calculateSMP();
           const receipt = await tx.wait(1);
-          if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
+          if (receipt.status == 1) {
+            console.log('confirmations: ', receipt.confirmations);
+            const currBlock = await this.providerService.provider.getBlock("latest");
+            const currMinute = Math.floor(currBlock.timestamp / 60) * 60;
+            const smp = this.convertBigNumberToNumber(await this.poolmarketContractInstance.getSMP(currMinute));
+            const totaldemand = this.convertBigNumberToNumber(await this.poolmarketContractInstance.getLatestTotalDemand());
+            console.log({smp});
+            console.log({totaldemand});
+          }
+
         } catch (error) {
           console.log('error code:', error.code);
         }

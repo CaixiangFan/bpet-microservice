@@ -117,10 +117,12 @@ export class AppService {
   }
 
   async getBids(): Promise<Bid[]> {
-    const bidIds = await this.poolmarketContractInstance.getValidBidIDs();
+    const currBlock = await this.providerService.provider.getBlock("latest");
+    const currHour = Math.floor(currBlock.timestamp / 3600) * 3600;
+    const origBids = await this.poolmarketContractInstance.getEnergyBids(currHour);
     var bids = [];
-    for (let i = 0; i < bidIds.length; i++) {
-      var bid = await this.poolmarketContractInstance.energyBids(bidIds[i]);
+    for (let i = 0; i < origBids.length; i++) {
+      var bid = origBids[i];
       var submitTimeStamp = this.convertBigNumberToNumber(bid.submitMinute);
       var submitTime = new Date(submitTimeStamp * 1000);
       bids.push(
