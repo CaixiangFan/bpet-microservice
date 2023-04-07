@@ -104,13 +104,14 @@ export class AppService {
       var offer = await this.poolmarketContractInstance.energyOffers(
         offerIds[i],
       );
+      var id = offerIds[i];
       var amount = this.convertBigNumberToNumber(offer.amount);
       var price = this.convertBigNumberToNumber(offer.price);
       var submitMinute = this.convertBigNumberToNumber(offer.submitMinute);
       var supplierAccount = offer.supplierAccount;
       var isValid = offer.isValid;
       offers.push(
-        new Offer(amount, price, submitMinute, supplierAccount, isValid),
+        new Offer(id, amount, price, submitMinute, supplierAccount, isValid),
       );
     }
     return offers;
