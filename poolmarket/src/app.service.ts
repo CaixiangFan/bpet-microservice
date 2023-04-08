@@ -139,6 +139,32 @@ export class AppService {
     return bids;
   }
 
+  async getMyBids(data: any): Promise<Bid[]> {
+    const bidHours = data.bidHours.split(',');
+    const account = data.account;
+    var bids = [];
+    for (let currHour of bidHours) {
+      const origBids = await this.poolmarketContractInstance.getEnergyBids(+currHour);
+      for (let i = 0; i < origBids.length; i++) {
+        var bid = origBids[i];
+        if (bid.consumerAccount == account) {
+          var submitTimeStamp = this.convertBigNumberToNumber(bid.submitMinute);
+          var submitTime = new Date(submitTimeStamp * 1000);
+          bids.push(
+            new Bid(
+              submitTime.toLocaleTimeString('en-us'),
+              this.convertBigNumberToNumber(bid.amount),
+              this.convertBigNumberToNumber(bid.price),
+              this.convertBigNumberToNumber(bid.submitMinute),
+              bid.consumerAccount,
+            ),
+          );
+        }
+      }
+    }
+    return bids;
+  }
+
   async getDispatchedOffers() {
     const currBlock = await this.provider.getBlock('latest');
     const currHour = Math.floor(currBlock.timestamp / 3600) * 3600;

@@ -31,6 +31,11 @@ export class AppController {
     return this.appService.getBids();
   }
 
+  @MessagePattern({ cmd: 'get_my_bids' })
+  async getMyBids(bidData: any) {
+    return this.appService.getMyBids(bidData);
+  }
+
   @MessagePattern({ cmd: 'get_dispatched_offers' })
   async getDispatchedOffers() {
     return this.appService.getDispatchedOffers();

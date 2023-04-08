@@ -106,6 +106,10 @@ export class AppService {
     return this.poolmarketClient.send({ cmd: 'get_bids' }, {});
   }
 
+  async getMyBids(account: string, bidHours: number[]) {
+    return this.poolmarketClient.send({ cmd: 'get_my_bids' }, {account, bidHours});
+  }
+
   async getDispatchedOffers() {
     return this.poolmarketClient.send({ cmd: 'get_dispatched_offers' }, {});
   }

@@ -119,6 +119,12 @@ export class AppController {
     return bids;
   }
 
+  @Get('/poolmarket/getMyBids/:account/:bidHours')
+  async getMyBids(@Param('account') account: string, @Param('bidHours') bidHours: number[]) {
+    const mybids = await this.appService.getMyBids(account, bidHours);
+    return mybids;
+  }
+
   @Get('/poolmarket/getDispatchedOffers')
   async getDispatchedOffers() {
     const dispatchedOffers = await this.appService.getDispatchedOffers();
