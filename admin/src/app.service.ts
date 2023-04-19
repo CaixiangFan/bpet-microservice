@@ -185,14 +185,14 @@ export class AppService {
     const pastHour: number = (Math.floor(currBlock.timestamp / 3600) - 1) * 3600;
     const dispatchedOffers = await this.poolmarketContractInstance.getDispatchedOffers(pastHour);
     if (dispatchedOffers.length > 0) {
-      console.log('calculating smp...');
-      try {
-        const tx = await this.poolmarketContractInstance.calculateSMP();
-        const receipt = await tx.wait(1);
-        if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
-      } catch (error) {
-        console.log('error code:', error.code);
-      }
+      // console.log('calculating smp...');
+      // try {
+      //   const tx = await this.poolmarketContractInstance.calculateSMP();
+      //   const receipt = await tx.wait(1);
+      //   if (receipt.status == 1) console.log('confirmations: ', receipt.confirmations);
+      // } catch (error) {
+      //   console.log('error code:', error.code);
+      // }
 
       console.log('Calculating pool prices ...');
       try {

@@ -61,7 +61,7 @@ export class AppService {
             new SMP(
               `${he} ${hour + 1}`,
               `${hour}:${minutes}`,
-              this.convertBigNumberToNumber(smp),
+              this.convertBigNumberToNumber(smp) / 100,
               volume,
             ),
           );
@@ -71,7 +71,6 @@ export class AppService {
     return smps;
   }
 
-  //ToDo: weighted average => calculate smp for every hour start
   async calculateProjectedPrice() {
     const _smps = await this.getsmps();
     var projectedPrice = 0;
@@ -94,7 +93,7 @@ export class AppService {
       }
       projectedPrice += price * duration;
     }
-    return Math.round((projectedPrice / 60) * 100) / 100;
+    return projectedPrice / 60 / 100;
   }
 
   async getOffers(): Promise<Offer[]> {
